@@ -8,7 +8,7 @@ from pygame.locals import *
 class Player(Entity):
     score = 0
     jumps = 0
-    lives = 3
+    liэes = 3
     moving_left = False
     moving_right = False
 
@@ -64,25 +64,27 @@ class Player(Entity):
         self.onGround = False;
         # do y-axis collisions
         self.collide(0, self.yvel, platforms)
-
+    """#====================================================================================================
+            if self.rect.left > 200:
+                self.rect.left = 40
+    #===================================================================================================="""
     def collide(self, xvel, yvel, platforms):
         for p in platforms:
             if pygame.sprite.collide_rect(self, p):
-                
-                    
                 if isinstance(p, Target):
                     self.score+=16
                     platforms.remove(p)
                     p.hide()
-                if xvel > 0:
-                    self.rect.right = p.rect.left
-                    print "collide right"
-                if xvel < 0:
-                    self.rect.left = p.rect.right
-                    print "collide left"
-                if yvel > 0:
-                    self.rect.bottom = p.rect.top
-                    self.onGround = True
-                    self.yvel = 0
-                if yvel < 0:
-                    self.rect.top = p.rect.bottom
+                else:
+                    if xvel > 0:
+                        self.rect.right = p.rect.left
+                        print "collide right"
+                    if xvel < 0:
+                        self.rect.left = p.rect.right
+                        print "collide left"
+                    if yvel > 0:
+                        self.rect.bottom = p.rect.top
+                        self.onGround = True
+                        self.yvel = 0
+                    if yvel < 0:
+                        self.rect.top = p.rect.bottom   
