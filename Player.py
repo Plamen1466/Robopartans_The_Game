@@ -8,7 +8,7 @@ from pygame.locals import *
 class Player(Entity):
     score = 0
     jumps = 0
-    liэes = 3
+    lives = 3
     moving_left = False
     moving_right = False
 
