@@ -9,7 +9,8 @@ class Player(Entity):
     score = 0
     jumps = 0
     lives = 3
-    
+    moving_left = False
+    moving_right = False
 
     def __init__(self, x, y):
         Entity.__init__(self)
@@ -34,12 +35,18 @@ class Player(Entity):
             pass
         if left:
             self.xvel = -6
-            self.image = pygame.image.load("files/Skins/martincho_left.png")
-            self.image = pygame.transform.scale(self.image, (55, 72))
+            if not self.moving_left:
+                self.image = pygame.image.load("files/Skins/martincho_left.png")
+                self.image = pygame.transform.scale(self.image, (55, 72))
+                self.moving_left = True
+                self.moving_right = False
         if right:
             self.xvel = 6
-            self.image = pygame.image.load("files/Skins/martincho_right.png")
-            self.image = pygame.transform.scale(self.image, (55, 72))
+            if not self.moving_right:
+                self.image = pygame.image.load("files/Skins/martincho_right.png")
+                self.image = pygame.transform.scale(self.image, (55, 72))
+                self.moving_right = True
+                self.moving_left = False
         if not self.onGround:
             # only accelerate with gravity if in the air
             self.yvel += 0.3
