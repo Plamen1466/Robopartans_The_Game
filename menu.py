@@ -35,19 +35,6 @@ def game():
         "S                                                                                                S",
         "S                                                                                                S",
         "S                                                                                                S",
-        "S                                                                                                S",
-        "S                                                       T      T            T                    S",
-        "S                                        T        T                   P-------                   S",
-        "S                                      p---                                                      S",
-        "S                                                      T                                         S",
-        "S                                                    p---                    T                   S",
-        "S                                 T                             T        P-------                S",
-        "S                             P-------                        p---                       T       S",
-        "S                                                 T                                    p---      S", 
-        "S                                                                                                S",
-        "S                                                                   p---                         S",
-        "S                                                                                                S",
-        "S                                                                                                S",
         "S                                                       T      T            T                    S",
         "S                                        T        T                   P-------                   S",
         "S                                      p---                                                      S",
@@ -101,7 +88,7 @@ def game():
     
     total_level_width  = len(level[0])*32
     total_level_height = len(level)*32
-    camera = Camera(complex_camera, total_level_width, total_level_height)
+    camera = Camera(total_level_width, total_level_height)
     entities.add(player)
     font = pygame.font.Font('files/Fonts/Adventure Subtitles.ttf',20)
     while 1:
@@ -149,35 +136,27 @@ def game():
         pygame.display.update()
 
 class Camera(object):
-    def __init__(self, camera_func, width, height):
-        self.camera_func = camera_func
+    def __init__(self, width, height):
         self.state = Rect(0, 0, width, height)
 
     def apply(self, target):
         return target.rect.move(self.state.topleft)
 
     def update(self, target):
-        self.state = self.camera_func(self.state, target.rect)
 
-        
-#==================================================================================================
-def simple_camera(camera, target_rect):                   
-    l, t, _, _ = target_rect
-    _, _, w, h = camera
-    return Rect(-l+HALF_WIDTH, -t+HALF_HEIGHT, w, h)
-#==================================================================================================
+		l, t, _, _ = target.rect
+		_, _, w, h = self.state
+		l, t, _, _ = -l+HALF_WIDTH, -t+HALF_HEIGHT, w, h
+
+		l = min(0, l)                           # stop scrolling at the left edge
+		l = max(-(self.state.width-WIN_WIDTH), l)   # stop scrolling at the right edge
+		t = max(-(self.state.height-WIN_HEIGHT), t) # stop scrolling at the bottom
+		t = min(0, t)                           # stop scrolling at the top
+		self.state = Rect(l, t, w, h)
+		return Rect(l, t, w, h)
 
 #==================================================================================================
-def complex_camera(camera, target_rect):
-    l, t, _, _ = target_rect
-    _, _, w, h = camera
-    l, t, _, _ = -l+HALF_WIDTH, -t+HALF_HEIGHT, w, h
 
-    l = min(0, l)                           # stop scrolling at the left edge
-    l = max(-(camera.width-WIN_WIDTH), l)   # stop scrolling at the right edge
-    t = max(-(camera.height-WIN_HEIGHT), t) # stop scrolling at the bottom
-    t = min(0, t)                           # stop scrolling at the top
-    return Rect(l, t, w, h)
 #==================================================================================================
 
 class Entity(pygame.sprite.Sprite):
