@@ -6,6 +6,7 @@ from ScoreLine import Score_line
 from Camera import Camera
 from Ground import Ground
 from Player import Player
+from BadPlatform import Bad_Platform
 from Platforms import Platforms
 from Target import Target
 from pygame.locals import * 
@@ -30,7 +31,7 @@ def game():
     pygame.mouse.set_visible(0)
     up = down = left = right = running = False
     bg = Surface((32,32))
-    gears_count = 0
+
     #bg.convert()
     bg.fill((153,255,0))#ЦВЯТ НА ФОНА
     entities = pygame.sprite.Group()
@@ -48,17 +49,17 @@ def game():
     "S                                        T        T                   P-------                   S",
     "S                                      p---                                                      S",
     "S                                                      T                                         S",
-    "S                                                    p---                    T                   S",
+    "S                                                    p---                  B---                  S",
     "S                                 T                             T        P-------                S",
     "S                             P-------                        p---                       T       S",
-    "S                                                 T                                    p---      S", 
+    "S                                               B---                                   p---      S", 
     "S                T                            P-------                                           S",
     "S            P-------               T                                 p---                       S",
     "S                                  p---                       T                    T             S",
     "S                           T                              P-------             P-------         S",
     "S                         p---                                                                   S",
     "S                                                                                                S",
-    "S                                            T                                                   S",
+    "S                                                                                                S",
     "SG-----------G-----------G-----------G-----------G-----------G-----------G-----------G-----------S",
     "S                                                                                                S"]
     # build the level
@@ -84,11 +85,11 @@ def game():
                 t = Target(x, y)
                 platforms.append(t)
                 entities.add(t)
-                gears_count += 1
+                player.gears_count += 1
             if col == "B":
-                t = Bad_Platforms(x, y)
-                platforms.append(t)
-                entities.add(t)
+                b = Bad_Platform(x, y)
+                platforms.append(b)
+                entities.add(b)
             
             x += 32
         y += 32
@@ -103,7 +104,7 @@ def game():
     font = pygame.font.Font('files/Fonts/Adventure Subtitles.ttf',20)
     while 1:
         timer.tick(120)
-        scoretext = font.render("Score:"+str(player.score)+"/"+str(gears_count*16)+"  Jumps:"+str(player.jumps)+ "   Lives:"+str(player.lives), 1,(255,255,255))
+        scoretext = font.render("Score:"+str(player.score)+"/"+str(player.gears_count*16)+"  Jumps:"+str(player.jumps)+ "   Lives:"+str(player.lives), 1,(255,255,255))
 
         for e in pygame.event.get():
             if e.type == QUIT: raise SystemExit, "QUIT"
@@ -143,6 +144,28 @@ def game():
         screen.blit(scoretext, (10 , 10))
         player.update(up, down, left, right, running, platforms)
         camera.update(player, WIN_WIDTH, WIN_HEIGHT)
+
+        if player.score == player.gears_count*16:
+            font_end = pygame.font.Font('files/Fonts/Adventure Subtitles.ttf',30)
+            end_text_first_line = font_end.render("Congratulations! ", 1,(255,0,0)) 
+            end_text_second_line = font_end.render("You collected maximum points! ", 1,(255,0,0)) 
+            screen.blit(end_text_first_line, (500 , 350))
+            screen.blit(end_text_second_line, (430 , 380))  
+            pygame.display.update() 
+            pygame.time.delay(2000)        
+            pygame.event.wait()            
+            menu_game()
+        if player.lives == 0:
+            font_end = pygame.font.Font('files/Fonts/Adventure Subtitles.ttf',30)
+            end_text_first_line = font_end.render("Game Over! ", 1,(255,0,0)) 
+            end_text_second_line = font_end.render("You died!", 1,(255,0,0)) 
+            screen.blit(end_text_first_line, (500 , 350))
+            screen.blit(end_text_second_line, (515 , 380))
+            pygame.display.update()  
+            pygame.time.delay(2000)        
+            pygame.event.wait()            
+            menu_game()
+
         pygame.display.update()
 
 
