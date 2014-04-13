@@ -19,6 +19,7 @@ class Player(Entity):
         self.xvel = 0
         self.yvel = 0
         self.onGround = False
+        self.hitPlatform = False
         self.image = pygame.image.load("files/Skins/martincho_right.png")
         self.image = pygame.transform.scale(self.image, (55, 72))
         self.image.convert()
@@ -30,8 +31,12 @@ class Player(Entity):
             if self.onGround:
                 sound = pygame.mixer.Sound('files/Sounds/Mario_Jumping-Mike_Koenig-989896458.wav')
                 sound.play()
-                self.yvel -= 9
+                if not self.hitPlatform:
+                    self.yvel -= 9
+                #self.yvel += 9
+                
                 self.jumps +=1
+
         if left:
             self.xvel = -6
             if not self.moving_left:
@@ -84,6 +89,10 @@ class Player(Entity):
                     if yvel > 0:
                         self.rect.bottom = p.rect.top
                         self.onGround = True
+                        self.hitPlatform = False 
                         self.yvel = 0
                     if yvel < 0:
-                        self.rect.top = p.rect.bottom   
+                        self.rect.top = p.rect.bottom 
+                        self.hitPlatform = True 
+                        self.onGround = False
+                        self.yvel = 0 
