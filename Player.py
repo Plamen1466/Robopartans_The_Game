@@ -2,11 +2,13 @@ from Entity import Entity
 import pygame 
 from Target import Target
 from Platforms import Platforms
+from BadPlatform import Bad_Platform
 from pygame.locals import *
 
 
 class Player(Entity):
     score = 0
+    gears_count = 0
     jumps = 0
     lives = 3
     moving_left = False
@@ -27,12 +29,9 @@ class Player(Entity):
             # only jump if on the ground
             if self.onGround:
                 sound = pygame.mixer.Sound('files/Sounds/Mario_Jumping-Mike_Koenig-989896458.wav')
-                #sound.play()
+                sound.play()
                 self.yvel -= 9
                 self.jumps +=1
-                
-        if down:
-            pass
         if left:
             self.xvel = -6
             if not self.moving_left:
@@ -62,26 +61,26 @@ class Player(Entity):
         self.rect.top += self.yvel
         # assuming we're in the air
         self.onGround = False;
-        # do y-axis collisions
+            # do y-axis collisions
         self.collide(0, self.yvel, platforms)
-    """#====================================================================================================
-            if self.rect.left > 200:
-                self.rect.left = 40
-    #===================================================================================================="""
     def collide(self, xvel, yvel, platforms):
         for p in platforms:
             if pygame.sprite.collide_rect(self, p):
                 if isinstance(p, Target):
-                    self.score+=16
                     platforms.remove(p)
                     p.hide()
+                    self.score+=16
+                elif isinstance(p, Bad_Platform):
+                    self.lives-=1
+                    self.rect.left = 40
+                    self.rect.top = 40
                 else:
                     if xvel > 0:
                         self.rect.right = p.rect.left
-                        print "collide right"
+                       # print "collide right"
                     if xvel < 0:
                         self.rect.left = p.rect.right
-                        print "collide left"
+                       # print "collide left"
                     if yvel > 0:
                         self.rect.bottom = p.rect.top
                         self.onGround = True
