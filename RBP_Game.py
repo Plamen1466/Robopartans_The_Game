@@ -107,7 +107,7 @@ def game():
     while 1:
         timer.tick(120)
         scoretext = font.render("Score:"+str(player.score)+"/"+str(player.gears_count*16)+"  Jumps:"+str(player.jumps), 1,(255,255,255))
-
+        lives_text = font.render("LIVES:", 1,(255,255,255))
         for e in pygame.event.get():
             if e.type == QUIT: raise SystemExit, "QUIT"
             if e.type == KEYDOWN and e.key == K_ESCAPE:
@@ -140,18 +140,14 @@ def game():
 
 
         # update player, draw everything else
-        
+        player.update(up, down, left, right, running, platforms)
         for e in entities:
             screen.blit(e.image, camera.apply(e))
-        screen.blit(scoretext, (10 , 10))
-
-        for i in range(player.lives):
-            screen.blit(lives_image, ((1050 - i*35), 0))
-
-        player.update(up, down, left, right, running, platforms)
         camera.update(player, WIN_WIDTH, WIN_HEIGHT)
-        
-
+        screen.blit(scoretext, (10 , 4))
+        screen.blit(lives_text, (900 , 4))
+        for i in range(player.lives):
+            screen.blit(lives_image, ((1050 - i*35), 0)) 
         if player.score == player.gears_count*16:
             font_end = pygame.font.Font('files/Fonts/Adventure Subtitles.ttf',30)
             end_text_first_line = font_end.render("Congratulations! ", 1,(255,0,0)) 
@@ -277,6 +273,34 @@ class Menu:
         mx, my = self.pozycja_wklejenia
         self.pozycja_wklejenia = (x+mx, y+my) 
 
+def about():
+    pygame.init()
+    screen = pygame.display.set_mode((1300,650), pygame.FULLSCREEN)
+    background = pygame.image.load("files/Logo_About.png")
+    background = pygame.transform.scale(background, (1450,805))
+    screen.blit(background, (-80, -100))
+    font = pygame.font.Font('files/Fonts/Play-Regular.ttf',30)
+    font_title=pygame.font.Font('files/Fonts/Adventure Subtitles.ttf',40)
+    autors = font_title.render("ABOUT THE CREATOR:", 1,(145,183,220))
+    Plamen1 = font.render("Plamen Dikov", 1, (145, 183, 220))
+    Plamen2 = font.render("Specialty SIT, 1 Group ", 1, (145, 183, 220))
+    Plamen3 = font.render("Fac No: 61362110 ", 1, (145, 183, 220))  
+    Plamen_image = pygame.image.load("files/Skins/glaven.png")
+    Plamen_image = pygame.transform.scale(Plamen_image, (187,250))
+    while 1:
+        screen.blit(Plamen1, (205, 400))
+        screen.blit(Plamen2, (205, 430))
+        screen.blit(Plamen3, (205, 460))
+        screen.blit(autors, (205, 105))
+        screen.blit(Plamen_image, (205, 155))
+        for event in pygame.event.get():
+            if event.type == KEYDOWN and event.key == K_ESCAPE:
+                menu_game()
+        pygame.display.update()
+
+
+
+
 
 def menu_game():
     import sys
@@ -358,7 +382,7 @@ def menu_game():
                         controls_text = font_controls.render("CONTROLS:", 1, (145, 183, 220))
                         screen.blit(controls_text, (20, 200))
                     if menu.get_position() == 2:
-                        subprocess.Popen("python files/About.py")
+                        about()
                     
                 if event.key == K_ESCAPE:
                     pygame.display.quit()
