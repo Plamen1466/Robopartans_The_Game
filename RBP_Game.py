@@ -27,6 +27,8 @@ def game():
     pygame.init()
     screen = pygame.display.set_mode(DISPLAY, pygame.FULLSCREEN)
     pygame.display.set_caption("Robopartans: The Game V1.2")
+    lives_image = pygame.image.load("files/Skins/helmet.png")
+    lives_image = pygame.transform.scale(lives_image, (32, 32))
     timer = pygame.time.Clock()
     pygame.mouse.set_visible(0)
     up = down = left = right = running = False
@@ -104,7 +106,7 @@ def game():
     font = pygame.font.Font('files/Fonts/Adventure Subtitles.ttf',20)
     while 1:
         timer.tick(120)
-        scoretext = font.render("Score:"+str(player.score)+"/"+str(player.gears_count*16)+"  Jumps:"+str(player.jumps)+ "   Lives:"+str(player.lives), 1,(255,255,255))
+        scoretext = font.render("Score:"+str(player.score)+"/"+str(player.gears_count*16)+"  Jumps:"+str(player.jumps), 1,(255,255,255))
 
         for e in pygame.event.get():
             if e.type == QUIT: raise SystemExit, "QUIT"
@@ -142,8 +144,13 @@ def game():
         for e in entities:
             screen.blit(e.image, camera.apply(e))
         screen.blit(scoretext, (10 , 10))
+
+        for i in range(player.lives):
+            screen.blit(lives_image, ((1050 - i*35), 0))
+
         player.update(up, down, left, right, running, platforms)
         camera.update(player, WIN_WIDTH, WIN_HEIGHT)
+        
 
         if player.score == player.gears_count*16:
             font_end = pygame.font.Font('files/Fonts/Adventure Subtitles.ttf',30)
