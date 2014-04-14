@@ -72,11 +72,12 @@ class Player(Entity):
         for p in platforms:
             if pygame.sprite.collide_rect(self, p):
                 if isinstance(p, Target):
-                    platforms.remove(p)
                     p.hide()
+                    platforms.remove(p)
                     self.score+=16
                 elif isinstance(p, Bad_Platform):
                     self.lives-=1
+                    pygame.time.delay(1000)
                     self.rect.left = 40
                     self.rect.top = 40
                 else:
@@ -89,7 +90,7 @@ class Player(Entity):
                     if yvel > 0:
                         self.rect.bottom = p.rect.top
                         self.onGround = True
-                        self.hitPlatform = False 
+                        self.hitPlatform = False  
                         self.yvel = 0
                     if yvel < 0:
                         self.rect.top = p.rect.bottom 
