@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from Entity import Entity
 import pygame 
 from pygame.locals import *
@@ -12,4 +13,4 @@ class Target(Entity):
         self.image = pygame.transform.scale(self.image, (self.width, self.height))
         self.rect = Rect(x, y, self.width, self.height)
     def hide(self):
-        self.image.fill(((153,255,0, 0)))
+        self.image.fill(((153,255,0, 0))) #Цвета става като този на фона и се задава пълна прозрачност

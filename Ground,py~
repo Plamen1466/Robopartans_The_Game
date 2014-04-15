@@ -1,0 +1,16 @@
+from Entity import Entity
+import pygame 
+from pygame.locals import *
+
+
+class Ground(Entity):          #Инициализира платформите и ограждащата рамка
+    def __init__(self, x, y):
+        Entity.__init__(self)
+        self.image = pygame.image.load("files/Platforms/Ready_project_Plamen_Dikov.png")
+        self.image = pygame.transform.scale(self.image, (64*6, 64))
+        self.image.convert()
+       
+        self.rect = Rect(x, y, 64*6, 64)
+
+    def update(self):
+        pass

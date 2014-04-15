@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from pygame.locals import * 
 
 class Camera(object):

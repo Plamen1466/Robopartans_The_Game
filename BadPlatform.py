@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from Entity import Entity
 import pygame 
 from pygame.locals import *
@@ -9,5 +10,5 @@ class Bad_Platform(Entity):
         self.image = pygame.transform.scale(self.image, (128, 32))
         self.image.convert()
        
-        self.rect = Rect(x, y+10, 128, 32)
+        self.rect = Rect(x, y+10, 128, 32)  #Платформата се извежда "вкопана"
 

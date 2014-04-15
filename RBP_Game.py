@@ -25,22 +25,22 @@ CAMERA_SLACK = 30
 def game():
     global cameraX, cameraY
     pygame.init()
-    screen = pygame.display.set_mode(DISPLAY, pygame.FULLSCREEN)
-    pygame.display.set_caption("Robopartans: The Game V1.2")
-    lives_image = pygame.image.load("files/Skins/helmet.png")
-    lives_image = pygame.transform.scale(lives_image, (32, 32))
-    timer = pygame.time.Clock()
-    pygame.mouse.set_visible(0)
-    up = down = left = right = running = False
-    bg = Surface((32,32))
+    screen = pygame.display.set_mode(DISPLAY, pygame.FULLSCREEN)            #Създаване на прозореца, задаване на fullscreen
+    pygame.display.set_caption("Robopartans: The Game V1.2")                #Задаване на име на прозореца
+    lives_image = pygame.image.load("files/Skins/helmet.png")               #Задаване на картинка, която ще илюстрира животите на играча
+    lives_image = pygame.transform.scale(lives_image, (32, 32))             
+    
+    timer = pygame.time.Clock()                               #Инициализация на таймера                 
+    pygame.mouse.set_visible(0)                               #Мишката не се вижда р рамките на прозореца
+    up = left = right = running = False                       #Всички функции за движение са неактивни
 
-    #bg.convert()
-    bg.fill((153,255,0))#ЦВЯТ НА ФОНА
+    bg = Surface((32,32))                                     #Създаване на фона
+    bg.fill((153,255,0))                                      #Цвят на фона
     entities = pygame.sprite.Group()
-    player = Player(55, 72)
-    platforms = []
+    player = Player(55, 72)                                   #Създаване на играча от класа Player
+    platforms = []                                            #Инициализация на списък, в който ще се съхраняват всички активни платформи 
 
-    x = y = 0
+    x = y = 0                                                 
     level = [
     "SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS",
     "S                                                                                                S",
@@ -53,7 +53,7 @@ def game():
     "S                                                      T                                         S",
     "S                                                    p---                  B---                  S",
     "S                                 T                             T        P-------                S",
-    "S                             P-------                        p---                       T       S",
+    "S                             P-------                        p---                       T       S",      #Моделиране на нивото
     "S                                               B---                                   p---      S", 
     "S                T                            P-------                                           S",
     "S            P-------               T                                 p---                       S",
@@ -64,19 +64,18 @@ def game():
     "S                                                                                                S",
     "SG-----------G-----------G-----------G-----------G-----------G-----------G-----------G-----------S",
     "S                                                                                                S"]
-    # build the level
-    for row in level:
+    for row in level:                   #Всички моделирани елементи се добавят в списъка с активните платформи
         for col in row:
             if col == "S":
                 s = Score_line(x, y)
                 platforms.append(s)
                 entities.add(s)
             if col == "p":
-                p = Platforms(x, y, 108, 32,"files/Platforms/Blue_beem_5_obrabotena.png")
+                p = Platforms(x, y, 108, 32,"files/Platforms/Blue_beem_5.png")
                 platforms.append(p)
                 entities.add(p)
             if col == "P":
-                P = Platforms(x, y, 251, 32,"files/Platforms/Blue_beem_11_obrabotena.png")
+                P = Platforms(x, y, 251, 32,"files/Platforms/Blue_beem_11.png")
                 platforms.append(P)
                 entities.add(P)
             if col == "G":
@@ -99,24 +98,24 @@ def game():
     y = 0
         
     
-    total_level_width  = len(level[0])*32
+    total_level_width  = len(level[0])*32                               
     total_level_height = len(level)*32
     camera = Camera(total_level_width, total_level_height)
-    entities.add(player)
-    font = pygame.font.Font('files/Fonts/Adventure Subtitles.ttf',20)
+    entities.add(player)                                                                        
+    font = pygame.font.Font('files/Fonts/Adventure Subtitles.ttf',20)       #Форматиране на текста в score line-а 
     while 1:
         timer.tick(120)
+        #Текст, който показва прогреса по събиране на точки и броя скокове, които са направени
         scoretext = font.render("Score:"+str(player.score)+"/"+str(player.gears_count*16)+"  Jumps:"+str(player.jumps), 1,(255,255,255))
+        #Пояснителен текст        
         lives_text = font.render("LIVES:", 1,(255,255,255))
-        for e in pygame.event.get():
+        
+        for e in pygame.event.get():                     #Проверка за натиснати бутони 
             if e.type == QUIT: raise SystemExit, "QUIT"
             if e.type == KEYDOWN and e.key == K_ESCAPE:
                 menu_game()
             if e.type == KEYDOWN and e.key == K_SPACE:
                 up = True
-                
-            if e.type == KEYDOWN and e.key == K_DOWN:
-                down = True
             if e.type == KEYDOWN and e.key == K_LEFT:
                 left = True
             if e.type == KEYDOWN and e.key == K_RIGHT:
@@ -125,22 +124,20 @@ def game():
                 
             if e.type == KEYUP and e.key == K_SPACE:
                 up = False
-            if e.type == KEYUP and e.key == K_DOWN:
-                down = False
             if e.type == KEYUP and e.key == K_RIGHT:
                 right = False
             if e.type == KEYUP and e.key == K_LEFT:
                 left = False
            
 
-        # draw background
+        # Извеждане на фона
         for y in range(32):
             for x in range(64):
                screen.blit(bg, (x*32 , y*32))
 
 
-        # update player, draw everything else
-        player.update(up, down, left, right, running, platforms)
+        # Ъпдейтване на играча и извеждане на всичко останало
+        player.update(up, left, right, running, platforms)
         for e in entities:
             screen.blit(e.image, camera.apply(e))
         camera.update(player, WIN_WIDTH, WIN_HEIGHT)
@@ -148,7 +145,10 @@ def game():
         screen.blit(lives_text, (900 , 4))
         for i in range(player.lives):
             screen.blit(lives_image, ((1050 - i*35), 0)) 
-        if player.score == player.gears_count*16:
+ 
+
+        #Проверка дали играта е свършила
+        if player.score == player.gears_count*16: #Ако са събрани всички зъбни колела, изведи съобщение и се върни в началното меню        
             font_end = pygame.font.Font('files/Fonts/Adventure Subtitles.ttf',30)
             end_text_first_line = font_end.render("Congratulations! ", 1,(255,0,0)) 
             end_text_second_line = font_end.render("You collected maximum points! ", 1,(255,0,0)) 
@@ -158,7 +158,7 @@ def game():
             pygame.time.delay(2000)        
             pygame.event.wait()            
             menu_game()
-        if player.lives == 0:
+        if player.lives == 0:                   #Ако играча е загубил всичките си животи, изведи съобщение и се върни в началното меню
             font_end = pygame.font.Font('files/Fonts/Adventure Subtitles.ttf',30)
             end_text_first_line = font_end.render("Game Over! ", 1,(255,0,0)) 
             end_text_second_line = font_end.render("You died!", 1,(255,0,0)) 
@@ -169,15 +169,9 @@ def game():
             pygame.event.wait()            
             menu_game()
 
-        pygame.display.update()
+        pygame.display.update()    
 
-
-#==================================================================================================
-
-
-        
-
-
+     
 if not pygame.display.get_init():
     pygame.display.init()
 
@@ -273,10 +267,10 @@ class Menu:
         mx, my = self.pozycja_wklejenia
         self.pozycja_wklejenia = (x+mx, y+my) 
 
-def about():
+def about():                #Страница About
     pygame.init()
     screen = pygame.display.set_mode((1300,650), pygame.FULLSCREEN)
-    background = pygame.image.load("files/Logo_About.png")
+    background = pygame.image.load("files/fon_martinchovci.png")
     background = pygame.transform.scale(background, (1450,805))
     screen.blit(background, (-80, -100))
     font = pygame.font.Font('files/Fonts/Play-Regular.ttf',30)
@@ -298,103 +292,107 @@ def about():
                 menu_game()
         pygame.display.update()
 
+def help():             #Страница Help
+    pygame.init()
+    screen = pygame.display.set_mode((1300,650), pygame.FULLSCREEN)
+    background = pygame.image.load("files/fon_martinchovci.png")
+    background = pygame.transform.scale(background, (1450,805))
+    screen.blit(background, (-80, -100))
+    font_title=pygame.font.Font('files/Fonts/Adventure Subtitles.ttf',40)
+    help = font_title.render("HOW TO PLAY:", 1,(145,183,220))  
+    help_image = pygame.image.load("files/help.png") 
+    help_image = pygame.transform.scale(help_image, (873,490))
+    while 1:
+        screen.blit(help, (205, 105))
+        screen.blit(help_image, (205, 155))
+        for event in pygame.event.get():
+            if event.type == KEYDOWN and event.key == K_ESCAPE:
+                menu_game()
+        pygame.display.update()
+        
 
 
 
 
-def menu_game():
-    import sys
-#================ Промяна на иконата ===============================================
+def menu_game():                #Функция, извеждаща менюто
+    import sys, pygame
+    from pygame.locals import *
+    import pygame.mixer
+    pygame.mixer.init(44100, -16,2,2048) #Инициализация на миксера
+
+#Промяна на иконата на прозореца
     icon = pygame.image.load("files/Skins/Martincho.png")
     icon = pygame.transform.scale(icon, (32, 32))
     pygame.display.set_icon(icon)
-#================ Мишката не се вижда ==============================================
+
     pygame.mouse.set_visible(0)
-#================ В заглавната лента се извежда името на играта ====================
+#В заглавната лента се извежда името на играта 
     pygame.display.set_caption("RBP_V1.2")
 
-#================ Избор на размер на прозореца =====================================
-    screen = pygame.display.set_mode((1300,650), pygame.FULLSCREEN) #0,6671875 and 0,(6) of HD resoultion
-#================ Зареждане на фон =================================================
+#Избор на размер на прозореца 
+    screen = pygame.display.set_mode((1300,650), pygame.FULLSCREEN) 
+
+#Зареждане на фон на менюто
     background = pygame.image.load("files/Martinchovcite_menu1.png")
     background = pygame.transform.scale(background, (1450,805))
     screen.blit(background, (-80, -100))
 
-    
-
-#================ Пояснителен текст над менюто =====================================
-   
+#Пояснителен текст над менюто  
     font=pygame.font.Font('files/Fonts/Adventure Subtitles.ttf',30)
     menutext=font.render("MENU", 1,(145,183,220))
     screen.blit(menutext, (677, 230))
-#===================================================================================
-    '''First you have to make an object of a *Menu class.
-    *init take 2 arguments. List of fields and destination surface.
-    Then you have a 4 configuration options:
-    *set_colors will set colors of menu (text, selection, background)
-    *set_fontsize will set size of font.
-    *set_font take a path to font you choose.
-    *move_menu is quite interseting. It is only option which you can use before 
-    and after *init statement. When you use it before you will move menu from 
-    center of your surface. When you use it after it will set constant coordinates. 
-    Uncomment every one and check what is result!
-    *draw will blit menu on the surface. Be carefull better set only -1 and 1 
-    arguments to move selection or nothing. This function will return actual 
-    position of selection.
-    *get_postion will return actual position of seletion. '''
-    menu = Menu()#necessary
 
-#=============== Задаване на цветовете на фона, маркера и текста на менюто ========
-    menu.set_colors((145,183,220),(36,36,168),(59,60,189))#optional
-#=============== Задаване на размер на менюто =====================================
-    menu.set_fontsize(30)#optional#=============== Задаване на позиция, където менюто ще бъде изведено ==============    
-    menu.move_menu(75, 58)#optional
-#=============== Инициализиране на съдържанието ===================================
-    menu.init(['Start','Help','About','Quit'], screen)#necessary
-#=============== Изчертаване на менюто ============================================
-    menu.draw()#necessary
-#==================================================================================
+    menu = Menu()   #Инициализация на менюто
 
+#Задаване на цветовете на фона, маркера и текста на менюто 
+    menu.set_colors((145,183,220),(36,36,168),(59,60,189))
 
-    pygame.key.set_repeat(199,69)#(delay,interval)
+#Задаване на размер на менюто 
+    menu.set_fontsize(30)
+
+#Задаване на позиция, където менюто ще бъде изведено     
+    menu.move_menu(75, 58)
+
+#Задаване на съдържанието 
+    menu.init(['Start','Help','About','Quit'], screen)
+#Изчертаване на менюто 
+    menu.draw()
+    pygame.key.set_repeat(199,69)
     
     pygame.display.update()
-    
+    sound = pygame.mixer.Sound('files/Sounds/menu.wav') #Задаване на музика
+    sound.set_volume(0.05)                              #Задаване на сила на звука
     while 1:
         
-        for event in pygame.event.get():
-            
+        sound.play()                                    #Изпълнение на музиката
+        for event in pygame.event.get():                #Проверка коя от опциите е избрана и изпълнение на съответната функция
             if event.type == KEYDOWN:
                 if event.key == K_UP:
                     menu.draw(-1)
-                    #here is the Menu class function
                 if event.key == K_DOWN:
                     menu.draw(1)
-                    #here is the Menu class function
                 if event.key == K_RETURN:
-                    if menu.get_position() == 3:#here is the Menu class function
-                        pygame.display.quit()
-                        sys.exit()
                     if menu.get_position() == 0:
+                        sound.stop()                        
                         game()
                     if menu.get_position() == 1:
-                        font_controls=pygame.font.Font('files/Fonts/Adventure Subtitles.ttf',25)
-                        controls_text = font_controls.render("CONTROLS:", 1, (145, 183, 220))
-                        screen.blit(controls_text, (20, 200))
+                        sound.stop()                        
+                        help()
                     if menu.get_position() == 2:
+                        sound.stop()                                                
                         about()
-                    
+                    if menu.get_position() == 3:
+                        pygame.display.quit()
+                        sys.exit()    
                 if event.key == K_ESCAPE:
                     pygame.display.quit()
                     sys.exit()
-                
-                
                 pygame.display.update()
             elif event.type == QUIT:
                 pygame.display.quit()
                 sys.exit()
         
         pygame.time.wait(8)
-        
-if __name__ == "__main__":
+
+if __name__ == "__main__": 
     menu_game()
