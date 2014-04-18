@@ -22,7 +22,7 @@ DEPTH = 32
 FLAGS = 0
 CAMERA_SLACK = 30
 
-def game():
+def game(file_level):
     global cameraX, cameraY
     pygame.init()
     screen = pygame.display.set_mode(DISPLAY, pygame.FULLSCREEN)            #Създаване на прозореца, задаване на fullscreen
@@ -40,30 +40,11 @@ def game():
     player = Player(55, 72)                                   #Създаване на играча от класа Player
     platforms = []                                            #Инициализация на списък, в който ще се съхраняват всички активни платформи 
 
-    x = y = 0                                                 
-    level = [
-    "SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS",
-    "S                                                                                                S",
-    "S                                                                                                S",
-    "S                                                                                                S",
-    "S                                                                                                S",
-    "S                                                       T      T            T                    S",
-    "S                                        T        T                   P-------                   S",
-    "S                                      p---                                                      S",
-    "S                                                      T                                         S",
-    "S                                                    p---                  B---                  S",
-    "S                                 T                             T        P-------                S",
-    "S                             P-------                        p---                       T       S",      #Моделиране на нивото
-    "S                                               B---                                   p---      S", 
-    "S                T                            P-------                                           S",
-    "S            P-------               T                                 p---                       S",
-    "S                                  p---                       T                    T             S",
-    "S                           T                              P-------             P-------         S",
-    "S                         p---                                                                   S",
-    "S                                                                                                S",
-    "S                                                                                                S",
-    "SG-----------G-----------G-----------G-----------G-----------G-----------G-----------G-----------S",
-    "S                                                                                                S"]
+    x = y = 0 
+    f = open(file_level)                                                
+    level = f.readlines()
+    f.close()
+
     for row in level:                   #Всички моделирани елементи се добавят в списъка с активните платформи
         for col in row:
             if col == "S":
@@ -98,15 +79,14 @@ def game():
     y = 0
         
     
-    total_level_width  = len(level[0])*32                               
+    total_level_width  = (len(level[0])-2)*32                               
     total_level_height = len(level)*32
     camera = Camera(total_level_width, total_level_height)
     entities.add(player)                                                                        
     font = pygame.font.Font('files/Fonts/Adventure Subtitles.ttf',20)       #Форматиране на текста в score line-а 
     while 1:
         timer.tick(120)
-        #Текст, който показва прогреса по събиране на точки и броя скокове, които са направени
-        scoretext = font.render("Score:"+str(player.score)+"/"+str(player.gears_count*16)+"  Jumps:"+str(player.jumps), 1,(255,255,255))
+    
         #Пояснителен текст        
         lives_text = font.render("LIVES:", 1,(255,255,255))
         
@@ -134,6 +114,8 @@ def game():
         for y in range(32):
             for x in range(64):
                screen.blit(bg, (x*32 , y*32))
+        
+        #Текст, който показва прогреса по събиране на точки и броя скокове, които са направени
 
 
         # Ъпдейтване на играча и извеждане на всичко останало
@@ -141,10 +123,14 @@ def game():
         for e in entities:
             screen.blit(e.image, camera.apply(e))
         camera.update(player, WIN_WIDTH, WIN_HEIGHT)
-        screen.blit(scoretext, (10 , 4))
+
         screen.blit(lives_text, (900 , 4))
+
         for i in range(player.lives):
             screen.blit(lives_image, ((1050 - i*35), 0)) 
+        #Текст, който показва прогреса по събиране на точки и броя скокове, които са направени
+        scoretext = font.render("Score:"+str(player.score)+"/"+str(player.gears_count*16)+"  Jumps:"+str(player.jumps), 1,(255,255,255))
+        screen.blit(scoretext, (10 , 4))
  
 
         #Проверка дали играта е свършила
@@ -153,7 +139,8 @@ def game():
             end_text_first_line = font_end.render("Congratulations! ", 1,(255,0,0)) 
             end_text_second_line = font_end.render("You collected maximum points! ", 1,(255,0,0)) 
             screen.blit(end_text_first_line, (500 , 350))
-            screen.blit(end_text_second_line, (430 , 380))  
+            screen.blit(end_text_second_line, (430 , 380)) 
+            screen.blit(scoretext, (10 , 4)) 
             pygame.display.update() 
             pygame.time.delay(2000)        
             pygame.event.wait()            
@@ -374,7 +361,7 @@ def menu_game():                #Функция, извеждаща менюто
                 if event.key == K_RETURN:
                     if menu.get_position() == 0:
                         sound.stop()                        
-                        game()
+                        game('Level_01.txt')
                     if menu.get_position() == 1:
                         sound.stop()                        
                         help()
