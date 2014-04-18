@@ -361,7 +361,7 @@ def menu_game():                #Функция, извеждаща менюто
                 if event.key == K_RETURN:
                     if menu.get_position() == 0:
                         sound.stop()                        
-                        game('Level_01.txt')
+                        game('files/Levels/Level_01.txt')
                     if menu.get_position() == 1:
                         sound.stop()                        
                         help()
