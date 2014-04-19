@@ -19,9 +19,10 @@ class Player(Entity):
         Entity.__init__(self)
         self.xvel = 0               
         self.yvel = 0
+        self.skin = skin
         self.onGround = False
         self.hitPlatform = False
-        self.image = pygame.image.load(skin)
+        self.image = pygame.image.load(self.skin+"/martincho_left.png")
         self.image = pygame.transform.scale(self.image, (55, 72))
         self.image.convert()
         self.rect = Rect(y, x, 55, 72)
@@ -39,14 +40,14 @@ class Player(Entity):
         if left: #Движение наляво  
             self.xvel = -6
             if not self.moving_left:  #Провери за предишното състояние
-                self.image = pygame.image.load("files/Skins/martincho_left.png") #Зареди съответната картинка
+                self.image = pygame.image.load(self.skin+"/martincho_left.png") #Зареди съответната картинка
                 self.image = pygame.transform.scale(self.image, (55, 72))
                 self.moving_left = True     
                 self.moving_right = False
         if right:   #Движение надясно
             self.xvel = 6
             if not self.moving_right:   #Провери за предишното състояние
-                self.image = pygame.image.load("files/Skins/martincho_right.png")   #Зареди съответната картинка
+                self.image = pygame.image.load(self.skin+"/martincho_right.png")   #Зареди съответната картинка
                 self.image = pygame.transform.scale(self.image, (55, 72))
                 self.moving_right = True
                 self.moving_left = False

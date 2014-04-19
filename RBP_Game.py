@@ -2,6 +2,7 @@
 import pygame, pygame.mixer
 import subprocess
 import re
+import sys
 from Entity import Entity
 from ScoreLine import Score_line
 from Camera import Camera
@@ -23,7 +24,7 @@ DEPTH = 32
 FLAGS = 0
 CAMERA_SLACK = 30
 
-def game(file_level, file_player):
+def game(level_folder):
     global cameraX, cameraY
     pygame.init()
     screen = pygame.display.set_mode(DISPLAY, pygame.FULLSCREEN)            #Създаване на прозореца, задаване на fullscreen
@@ -34,36 +35,35 @@ def game(file_level, file_player):
     timer = pygame.time.Clock()                               #Инициализация на таймера                 
     pygame.mouse.set_visible(0)                               #Мишката не се вижда р рамките на прозореца
     up = left = right = running = False                       #Всички функции за движение са неактивни
-    f_player = open(file_player)
-    skin = f_player.readline()
-    skin = re.sub(r'\n', '', skin)
+    directory = 'files/Levels/'+level_folder
     bg = Surface((32,32))                                     #Създаване на фона
     bg.fill((153,255,0))                                      #Цвят на фона
     entities = pygame.sprite.Group()
-    player = Player(55, 72, skin)                                   #Създаване на играча от класа Player
+    player = Player(55, 72, directory)                                   #Създаване на играча от класа Player
     platforms = []                                            #Инициализация на списък, в който ще се съхраняват всички активни платформи 
 
     x = y = 0 
-    f_level = open(file_level)                                                
+    path_to_map = 'files/Levels/'+level_folder+'/map.txt'
+    f_level = open(path_to_map)                                                
     level = f_level.readlines()
     f_level.close()
 
     for row in level:                   #Всички моделирани елементи се добавят в списъка с активните платформи
         for col in row:
             if col == "S":
-                s = Score_line(x, y)
+                s = Score_line(x, y, directory)
                 platforms.append(s)
                 entities.add(s)
             if col == "p":
-                p = Platforms(x, y, 108, 32,"files/Platforms/Blue_beem_5.png")
+                p = Platforms(x, y, 108, 32,directory+"/beam_5.png")
                 platforms.append(p)
                 entities.add(p)
             if col == "P":
-                P = Platforms(x, y, 251, 32,"files/Platforms/Blue_beem_11.png")
+                P = Platforms(x, y, 251, 32,directory+"/beam_11.png")
                 platforms.append(P)
                 entities.add(P)
             if col == "G":
-                g = Ground(x, y)
+                g = Ground(x, y, directory)
                 platforms.append(g)
                 entities.add(g)
             if col == "T":
@@ -147,7 +147,7 @@ def game(file_level, file_player):
             pygame.display.update() 
             pygame.time.delay(2000)        
             pygame.event.wait()            
-            menu_game()
+            game('Level_02')
         if player.lives == 0:                   #Ако играча е загубил всичките си животи, изведи съобщение и се върни в началното меню
             font_end = pygame.font.Font('files/Fonts/Adventure Subtitles.ttf',30)
             end_text_first_line = font_end.render("Game Over! ", 1,(255,0,0)) 
@@ -305,9 +305,6 @@ def help():             #Страница Help
 
 
 def menu_game():                #Функция, извеждаща менюто
-    import sys, pygame
-    from pygame.locals import *
-    import pygame.mixer
     pygame.mixer.init(44100, -16,2,2048) #Инициализация на миксера
 
 #Промяна на иконата на прозореца
@@ -364,7 +361,7 @@ def menu_game():                #Функция, извеждаща менюто
                 if event.key == K_RETURN:
                     if menu.get_position() == 0:
                         sound.stop()                        
-                        game('files/Levels/Level_01/Level_01.txt', 'files/Levels/Level_01/Level_01_player.txt')
+                        game('Level_01')
                     if menu.get_position() == 1:
                         sound.stop()                        
                         help()

@@ -3,9 +3,9 @@ import pygame
 from pygame.locals import *
 
 class Score_line(Entity):
-    def __init__(self, x, y):
+    def __init__(self, x, y, image_path):
         Entity.__init__(self)
-        self.image = pygame.image.load("files/Platforms/Platform_blue_plate.png")
+        self.image = pygame.image.load(image_path+"/plate.png")
         self.image = pygame.transform.scale(self.image, (32, 32))
         self.image.convert()
        
