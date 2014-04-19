@@ -53,7 +53,7 @@ def game(level_folder):
     f_level.close()
     level_color = re.sub(r'\n', '', level_color)
     level_color = re.sub(r'\r', '', level_color)
-    print level_color
+
     bg.fill(Color(level_color))                                      #Цвят на фона
 
     for row in level:                   #Всички моделирани елементи се добавят в списъка с активните платформи
