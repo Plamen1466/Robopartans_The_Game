@@ -15,13 +15,13 @@ class Player(Entity):
     moving_left = False
     moving_right = False
 
-    def __init__(self, x, y):       #Конструктор
+    def __init__(self, x, y, skin):       #Конструктор
         Entity.__init__(self)
         self.xvel = 0               
         self.yvel = 0
         self.onGround = False
         self.hitPlatform = False
-        self.image = pygame.image.load("files/Skins/martincho_right.png")
+        self.image = pygame.image.load(skin)
         self.image = pygame.transform.scale(self.image, (55, 72))
         self.image.convert()
         self.rect = Rect(y, x, 55, 72)
@@ -71,10 +71,11 @@ class Player(Entity):
             if pygame.sprite.collide_rect(self, p): 
                 if isinstance(p, Target):       #Ако играча е в рамките на зъбно колело
                     p.hide()                    #Зъбното колело изчезва
+                    self.score+=16              #Вдига се брояча на точките
                     platforms.remove(p)         #Премахва се от списъка с платформи
                     gear_sound = pygame.mixer.Sound('files/Sounds/gear.wav')    
                     gear_sound.play()           #Изпълнява се съответния звук
-                    self.score+=16              #Вдига се брояча на точките
+
                 elif isinstance(p, Bad_Platform):   #Ако играча е в рамките на платформа, която го убива
                     self.lives-=1                   #Намаляват се животите с 1
                     pain_sound = pygame.mixer.Sound('files/Sounds/pain.wav')
