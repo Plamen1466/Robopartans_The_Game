@@ -18,35 +18,43 @@ WIN_WIDTH = 1200
 WIN_HEIGHT = 705
 HALF_WIDTH = int(WIN_WIDTH / 2)
 HALF_HEIGHT = int(WIN_HEIGHT / 2)
-
+current_level = 1
 DISPLAY = (WIN_WIDTH, WIN_HEIGHT)
 DEPTH = 32
 FLAGS = 0
 CAMERA_SLACK = 30
 
+
 def game(level_folder):
     global cameraX, cameraY
+    global current_level
     pygame.init()
     screen = pygame.display.set_mode(DISPLAY, pygame.FULLSCREEN)            #Създаване на прозореца, задаване на fullscreen
     pygame.display.set_caption("Robopartans: The Game V1.2")                #Задаване на име на прозореца
     lives_image = pygame.image.load("files/Skins/helmet.png")               #Задаване на картинка, която ще илюстрира животите на играча
     lives_image = pygame.transform.scale(lives_image, (32, 32))             
     
+
     timer = pygame.time.Clock()                               #Инициализация на таймера                 
     pygame.mouse.set_visible(0)                               #Мишката не се вижда р рамките на прозореца
     up = left = right = running = False                       #Всички функции за движение са неактивни
     directory = 'files/Levels/'+level_folder
     bg = Surface((32,32))                                     #Създаване на фона
-    bg.fill((153,255,0))                                      #Цвят на фона
+
     entities = pygame.sprite.Group()
     player = Player(55, 72, directory)                                   #Създаване на играча от класа Player
     platforms = []                                            #Инициализация на списък, в който ще се съхраняват всички активни платформи 
 
     x = y = 0 
     path_to_map = 'files/Levels/'+level_folder+'/map.txt'
-    f_level = open(path_to_map)                                                
+    f_level = open(path_to_map) 
+    level_color = f_level.readline()                                               
     level = f_level.readlines()
     f_level.close()
+    level_color = re.sub(r'\n', '', level_color)
+    level_color = re.sub(r'\r', '', level_color)
+    print level_color
+    bg.fill(Color(level_color))                                      #Цвят на фона
 
     for row in level:                   #Всички моделирани елементи се добавят в списъка с активните платформи
         for col in row:
@@ -146,8 +154,9 @@ def game(level_folder):
             screen.blit(scoretext, (10 , 4)) 
             pygame.display.update() 
             pygame.time.delay(2000)        
-            pygame.event.wait()            
-            game('Level_02')
+            pygame.event.wait() 
+            current_level+=1           
+            game('Level_'+str(current_level))
         if player.lives == 0:                   #Ако играча е загубил всичките си животи, изведи съобщение и се върни в началното меню
             font_end = pygame.font.Font('files/Fonts/Adventure Subtitles.ttf',30)
             end_text_first_line = font_end.render("Game Over! ", 1,(255,0,0)) 
@@ -361,7 +370,7 @@ def menu_game():                #Функция, извеждаща менюто
                 if event.key == K_RETURN:
                     if menu.get_position() == 0:
                         sound.stop()                        
-                        game('Level_01')
+                        game('Level_1')
                     if menu.get_position() == 1:
                         sound.stop()                        
                         help()
