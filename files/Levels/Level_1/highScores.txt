@@ -1,0 +1,32 @@
+[Йоан]
+score=224
+jumps=22
+
+[Калоян П.]
+score=224
+jumps=21
+
+[Чавдар]
+score=224
+jumps=20
+
+[Максим]
+score=160
+jumps=50
+
+[Калоян Б.]
+score=224
+jumps=35
+
+[Даниел]
+score=224
+jumps=30
+
+[Никифор]
+score=224
+jumps=23
+
+[Алекс Павлов]
+score=224
+jumps=10
+
