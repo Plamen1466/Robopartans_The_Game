@@ -16,7 +16,7 @@ from pygame.locals import *
 from pygame import *
 from menu import Menu
 from Shield import Shield
-from Enemy import Enemy
+
 
 WIN_WIDTH = 1200
 WIN_HEIGHT = 705
@@ -29,7 +29,7 @@ FLAGS = 0
 CAMERA_SLACK = 30
 
 
-def game(level_folder):
+def game(level_folder, lives):
     global cameraX, cameraY
     global current_level
     pygame.init()
@@ -44,7 +44,7 @@ def game(level_folder):
     bg = Surface((32,32))                                     #Създаване на фона
 
     entities = pygame.sprite.Group()
-    player = Player(40, 40, directory)                                   #Създаване на играча от класа Player
+    player = Player(40, 40, directory, lives)                                   #Създаване на играча от класа Player
     platforms = []                                            #Инициализация на списък, в който ще се съхраняват всички активни платформи 
     enemy = []
 
@@ -96,11 +96,7 @@ def game(level_folder):
                 v = Shield(x, y, directory)
                 platforms.append(v)
                 entities.add(v)
-            if col == "E":
-                e = Enemy(x, y, directory)
-                platforms.append(e)
-                entities.add(e)
-
+           
             
             x += 32
         y += 32
@@ -175,7 +171,7 @@ def game(level_folder):
             pygame.time.delay(2000)        
             pygame.event.wait() 
             current_level+=1           
-            game('Level_'+str(current_level))
+            game('Level_'+str(current_level), player.lives)
         if player.lives == 0:                   #Ако играча е загубил всичките си животи, изведи съобщение и се върни в началното меню
             font_end = pygame.font.Font('files/Fonts/Adventure Subtitles.ttf',30)
             end_text_first_line = font_end.render("Game Over! ", 1,(255,0,0)) 
@@ -302,7 +298,7 @@ def menu_game():                #Функция, извеждаща менюто
                 if event.key == K_RETURN:
                     if menu.get_position() == 0:
                         sound.stop()                        
-                        game('Level_1')
+                        game('Level_1', 3)
                     if menu.get_position() == 1:
                         sound.stop()                        
                         help()

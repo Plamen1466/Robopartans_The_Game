@@ -13,18 +13,19 @@ class Player(Entity):
     score = 0             #Задаване на член променливи за точки, колела, които трябва да се съберат, скокове, животи и посока на движение
     gears_count = 0
     jumps = 0
-    lives = 3
+
     moving_left = False
     moving_right = False
     shield = False
 
-    def __init__(self, x, y, skin):       #Конструктор
+    def __init__(self, x, y, skin, lives):       #Конструктор
         Entity.__init__(self)
         self.xvel = 0               
         self.yvel = 0
         self.skin = skin
         self.onGround = False
         self.hitPlatform = False
+        self.lives = lives
         self.image = pygame.image.load(self.skin+"/martincho_left.png")
         self.image = pygame.transform.scale(self.image, (55, 72))
         self.image.convert()
