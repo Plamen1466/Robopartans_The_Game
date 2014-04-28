@@ -2,8 +2,10 @@
 from Entity import Entity
 import pygame 
 from Target import Target
+from Live import Live
 from Platforms import Platforms
 from BadPlatform import Bad_Platform
+from Shield import Shield
 from pygame.locals import *
 
 
@@ -14,6 +16,7 @@ class Player(Entity):
     lives = 3
     moving_left = False
     moving_right = False
+    shield = False
 
     def __init__(self, x, y, skin):       #Конструктор
         Entity.__init__(self)
@@ -26,8 +29,21 @@ class Player(Entity):
         self.image = pygame.transform.scale(self.image, (55, 72))
         self.image.convert()
         self.rect = Rect(y, x, 55, 72)
+   
+    def change_skin(self):
+        if self.shield == True:
+            if self.moving_left == True:
+                self.image = pygame.image.load(self.skin+"/martincho_left.png")
+                self.image = pygame.transform.scale(self.image, (55, 72))
+            elif self.moving_right == True:
+                self.image = pygame.image.load(self.skin+"/martincho_right.png")
+                self.image = pygame.transform.scale(self.image, (55, 72))
+        else:
+            self.image = pygame.image.load(self.skin+"/martincho.png")  
+            self.image = pygame.transform.scale(self.image, (55, 72))
 
-    def update(self, up, left, right, running, platforms):        #Функция за ъпдейтване на състоянието на играча
+
+    def update(self, up, left, right, running, platforms, max_height):        #Функция за ъпдейтване на състоянието на играча
         if up:  #Скок
             # Скочи само ако си на платформа
             if self.onGround:
@@ -40,34 +56,41 @@ class Player(Entity):
         if left: #Движение наляво  
             self.xvel = -6
             if not self.moving_left:  #Провери за предишното състояние
-                self.image = pygame.image.load(self.skin+"/martincho_left.png") #Зареди съответната картинка
+                self.change_skin()
                 self.image = pygame.transform.scale(self.image, (55, 72))
                 self.moving_left = True     
                 self.moving_right = False
         if right:   #Движение надясно
             self.xvel = 6
             if not self.moving_right:   #Провери за предишното състояние
-                self.image = pygame.image.load(self.skin+"/martincho_right.png")   #Зареди съответната картинка
-                self.image = pygame.transform.scale(self.image, (55, 72))
+                self.change_skin()
+                
                 self.moving_right = True
                 self.moving_left = False
         if not self.onGround:    # Създаване на гравитация
             self.yvel += 0.3
             if self.yvel > 100: self.yvel = 100
+            if self.rect.top > max_height:
+                self.lives-=1                   #Намаляват се животите с 1
+                pygame.time.delay(1000)         #Изчаква се 1 секунда
+                self.rect.left = 40             #Играчът се връща в началото на нивото
+                self.rect.top = 40 
+                
         if not(left or right):  #Ако не се движа наляво или надясно, задай скорост 0 по оста Х
             self.xvel = 0
         # Измести играча по X
         self.rect.left += self.xvel
         # Колизия по Х
-        self.collide(self.xvel, 0, platforms)
+        self.collide(self.xvel, 0, platforms, max_height)
         # Измести играча по Y
         self.rect.top += self.yvel
         # Играча не се намира на платформа
         self.onGround = False;
         # Колизия по Y
-        self.collide(0, self.yvel, platforms)
+        self.collide(0, self.yvel, platforms, max_height)
+        self.change_skin()
     
-    def collide(self, xvel, yvel, platforms):   #Функция, проверяваща за колизии 
+    def collide(self, xvel, yvel, platforms, max_height):   #Функция, проверяваща за колизии 
         for p in platforms:
             if pygame.sprite.collide_rect(self, p): 
                 if isinstance(p, Target):       #Ако играча е в рамките на зъбно колело
@@ -85,6 +108,16 @@ class Player(Entity):
                     pygame.time.delay(1000)         #Изчаква се 1 секунда
                     self.rect.left = 40             #Играчът се връща в началото на нивото
                     self.rect.top = 40
+                elif isinstance(p, Live):
+                    self.lives += 1
+                    p.hide()
+                    platforms.remove(p)         #Премахва се от списъка с платформи
+                elif isinstance(p, Shield):
+                    self.shield = True
+                    self.change_skin()
+                    p.hide()
+                    platforms.remove(p)         #Премахва се от списъка с платформи
+                
                 else:                               #В останалите случаи променяй състоянието на играча 
                     if xvel > 0:
                         self.rect.right = p.rect.left
@@ -94,7 +127,7 @@ class Player(Entity):
                         self.rect.bottom = p.rect.top
                         self.onGround = True
                         self.hitPlatform = False  
-                        self.yvel = 0
+                        self.yvel = 0          
                     if yvel < 0:
                         self.rect.top = p.rect.bottom 
                         self.hitPlatform = True 

@@ -8,12 +8,16 @@ from ScoreLine import Score_line
 from Camera import Camera
 from Ground import Ground
 from Player import Player
+from Live import Live
 from BadPlatform import Bad_Platform
 from Platforms import Platforms
 from Target import Target
 from pygame.locals import * 
 from pygame import *
 from menu import Menu
+from Shield import Shield
+from Enemy import Enemy
+
 WIN_WIDTH = 1200
 WIN_HEIGHT = 705
 HALF_WIDTH = int(WIN_WIDTH / 2)
@@ -31,8 +35,6 @@ def game(level_folder):
     pygame.init()
     screen = pygame.display.set_mode(DISPLAY, pygame.FULLSCREEN)            #Създаване на прозореца, задаване на fullscreen
     pygame.display.set_caption("Robopartans: The Game V1.2")                #Задаване на име на прозореца
-    lives_image = pygame.image.load("files/Skins/helmet.png")               #Задаване на картинка, която ще илюстрира животите на играча
-    lives_image = pygame.transform.scale(lives_image, (32, 32))             
     
 
     timer = pygame.time.Clock()                               #Инициализация на таймера                 
@@ -42,8 +44,9 @@ def game(level_folder):
     bg = Surface((32,32))                                     #Създаване на фона
 
     entities = pygame.sprite.Group()
-    player = Player(55, 72, directory)                                   #Създаване на играча от класа Player
+    player = Player(40, 40, directory)                                   #Създаване на играча от класа Player
     platforms = []                                            #Инициализация на списък, в който ще се съхраняват всички активни платформи 
+    enemy = []
 
     x = y = 0 
     path_to_map = 'files/Levels/'+level_folder+'/map.txt'
@@ -53,7 +56,9 @@ def game(level_folder):
     f_level.close()
     level_color = re.sub(r'\n', '', level_color)
     level_color = re.sub(r'\r', '', level_color)
-
+    lives_image = pygame.image.load(directory+"/live.png")               #Задаване на картинка, която ще илюстрира животите на играча
+    lives_image = pygame.transform.scale(lives_image, (32, 32))             
+    
     bg.fill(Color(level_color))                                      #Цвят на фона
 
     for row in level:                   #Всички моделирани елементи се добавят в списъка с активните платформи
@@ -83,6 +88,19 @@ def game(level_folder):
                 b = Bad_Platform(x, y)
                 platforms.append(b)
                 entities.add(b)
+            if col == "L":
+                l = Live(x, y, directory)
+                platforms.append(l)
+                entities.add(l)
+            if col == "V":
+                v = Shield(x, y, directory)
+                platforms.append(v)
+                entities.add(v)
+            if col == "E":
+                e = Enemy(x, y, directory)
+                platforms.append(e)
+                entities.add(e)
+
             
             x += 32
         y += 32
@@ -130,15 +148,16 @@ def game(level_folder):
 
 
         # Ъпдейтване на играча и извеждане на всичко останало
-        player.update(up, left, right, running, platforms)
+        player.update(up, left, right, running, platforms, total_level_height)
         for e in entities:
             screen.blit(e.image, camera.apply(e))
         camera.update(player, WIN_WIDTH, WIN_HEIGHT)
+        
 
         screen.blit(lives_text, (900 , 4))
 
         for i in range(player.lives):
-            screen.blit(lives_image, ((1050 - i*35), 0)) 
+            screen.blit(lives_image, ((1100 - i*35), 0)) 
         #Текст, който показва прогреса по събиране на точки и броя скокове, които са направени
         scoretext = font.render("Score:"+str(player.score)+"/"+str(player.gears_count*16)+"  Jumps:"+str(player.jumps), 1,(255,255,255))
         screen.blit(scoretext, (10 , 4))

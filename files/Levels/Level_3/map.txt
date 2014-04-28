@@ -5,7 +5,7 @@ S   S                                                                           
 S   S                                                                     T                        S
 S   S                                                                   T     T                    S
 S   S                                                                           T                  S
-S   S        T               T         T                   T                                       S
+S   S        T               T         T           L       T                                       S
 S   S            P------      P-------        P-------         P------            T                S
 S   S     S                                                                                        S
 S   S                                                                                              S
@@ -25,7 +25,6 @@ S   S                                                                           
 S    S                                                                                  T          S
 S                                                                                                  S
 S                                                                                                  S
-S                                                                                                  S
+S       L                                              V                                           S
 SG----------- T           G----------- T          G----------  T           G-----------G-----------S
 S            S                        S                       S                                    S
-SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS

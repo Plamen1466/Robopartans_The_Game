@@ -7,7 +7,7 @@ S                                                                               
 S                                                       T      T            T                                                        S
 S                                        T        T                   P-------                                                       S
 S                                      p---                                                                                          S
-S                                                      T                                                                             S
+S                                                     V                                                                              S
 S                                                    p---                  B---                                T                     S
 S                                 T                             T        P-------                                 T                  S
 S                             P-------                        p---                       T    P-------       S     T                 S
@@ -17,7 +17,7 @@ S            P-------                                                 p---      
 S                                                             T               p--- T               TT SSSSSSSS      T                S
 S                           T                              P-------                           TT SSSSSSSSSSSSS      T                S
 S                         p---                                                           TTT SSSSSSSSSSSSSSSSSS     T                S
-S                                                                           T T T T TSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS   B---   T  S
+S      L                                                                    T T T T TSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS   B---   T  S
 S                                                                         SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
 SG-----------G-----------G-----------G-----------G-----------G-----------SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
 S                                                                        SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
