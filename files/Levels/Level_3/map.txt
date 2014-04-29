@@ -4,20 +4,20 @@ S                                                                               
 S                                                                                                S
 S                                                                                                S
 S                                                                                                S
-S                                                       T      T            T                    S
-S                                        T        T                   P-------                   S
-S                                      p---                                                      S
-S                                                      T                                         S
-S                                                    p---                  B---                  S
-S                                 V                             T        P-------                S
-S                             P-------                        p---                       T       S
-S                                               B---                                   p---      S
-S                T                            P-------                                           S
-S            P-------               T                                 p---                       S
-S                                  p---                       T                    T             S
-S                           T                              P-------             P-------         S
-S                         p---                                                                   S
-S                                                                                                S
-S          E                            E                           E       p---          E      S
-S                               S            S                S         S                        S
+S                                                              T      S    TE S                  S
+S                                                                     SSSSSSSSS                  S
+S                                                                              S                 S
+S                                                      T                        S                S
+S                                                    SSSSS                 B---  S               S
+S                                 V                             T        SSSSSSSSSS              S
+S                             SSSSSSSS                        SSSS                       T       S
+S               E                               B---                                  SSSSS      S
+S            S    T   S                       SSSSSSSSS                              S           S
+S            SSSSSSSSSS             T                                 SSSS          S            S
+S                                  SSSS                       T                    S             S
+S                           T                              SSSSSSSS          SSSSSSSSSSSSSSSS    S
+S                         SSSSS                                             S                 TT S
+S                                                                          STTTTTTTTTTTTTTTTTTTTTS
+S          E                            E            E          S   E   SSS     E                S
+S                               S            S                SSSSSSSSSSSSSS                     S
 SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
