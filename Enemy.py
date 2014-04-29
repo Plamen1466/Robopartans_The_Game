@@ -63,4 +63,4 @@ class Enemy(Entity):
                     self.rect.top = p.rect.bottom 
                     self.hitPlatform = True 
                     self.onGround = False
-                    self.yvel = 0 
+                    self.yvel = 0

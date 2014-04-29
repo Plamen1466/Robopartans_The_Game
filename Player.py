@@ -138,11 +138,17 @@ class Player(Entity):
         for p in enemy:
             if pygame.sprite.collide_rect(self, p): 
                 if isinstance(p, Enemy):   #Ако играча е в рамките на платформа, която го убива
-                    self.lives-=1                   #Намаляват се животите с 1
-                    pain_sound = pygame.mixer.Sound('files/Sounds/pain.wav')
-                    pain_sound.set_volume(0.05)
-                    pain_sound.play()               #Изпълнява се съответния звук
-                    pygame.time.delay(1000)         #Изчаква се 1 секунда
-                    self.rect.left = 40             #Играчът се връща в началото на нивото
-                    self.rect.top = 40
+                    if self.shield == True: #Ако играча има щит
+                        if p.direction%2 == 0: #И ако врага се движи наляво
+                            self.rect.right +=1 #Избутай играча наляво
+                        else:                  #Ако врага се движи надясно
+                            self.rect.left -=1  #Избутай играча надясно
+                    elif self   .shield == False: # Ако играча няма щит отеми от животите му                   
+                        self.lives-=1                   #Намаляват се животите с 1
+                        pain_sound = pygame.mixer.Sound('files/Sounds/pain.wav')
+                        pain_sound.set_volume(0.05)
+                        pain_sound.play()               #Изпълнява се съответния звук
+                        pygame.time.delay(1000)         #Изчаква се 1 секунда
+                        self.rect.left = 40             #Играчът се връща в началото на нивото
+                        self.rect.top = 40
                 

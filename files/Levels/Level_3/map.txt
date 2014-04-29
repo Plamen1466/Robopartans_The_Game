@@ -1,4 +1,4 @@
-#99FF00
+#99CCFF
 SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
 S                                                                                                S
 S                                                                                                S
@@ -18,6 +18,6 @@ S                                  p---                       T                 
 S                           T                              P-------             P-------         S
 S                         p---                                                                   S
 S                                                                                                S
-S                                      E                                    p---                 S
-S                               S            S                                                   S
+S          E                            E                           E       p---          E      S
+S                               S            S                S         S                        S
 SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
