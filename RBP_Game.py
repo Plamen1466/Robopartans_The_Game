@@ -16,6 +16,7 @@ from pygame.locals import *
 from pygame import *
 from menu import Menu
 from Shield import Shield
+from Enemy import Enemy
 
 
 WIN_WIDTH = 1200
@@ -96,6 +97,10 @@ def game(level_folder, lives):
                 v = Shield(x, y, directory)
                 platforms.append(v)
                 entities.add(v)
+            if col == "E":
+                e = Enemy(x, y, directory)
+                enemy.append(e)
+                entities.add(e)
            
             
             x += 32
@@ -144,14 +149,17 @@ def game(level_folder, lives):
 
 
         # Ъпдейтване на играча и извеждане на всичко останало
-        player.update(up, left, right, running, platforms, total_level_height)
+        for i in enemy:
+            i.update(True, platforms, total_level_height)         
+        player.update(up, left, right, running, platforms, enemy, total_level_height)
+               
         for e in entities:
             screen.blit(e.image, camera.apply(e))
         camera.update(player, WIN_WIDTH, WIN_HEIGHT)
         
 
         screen.blit(lives_text, (900 , 4))
-
+        
         for i in range(player.lives):
             screen.blit(lives_image, ((1100 - i*35), 0)) 
         #Текст, който показва прогреса по събиране на точки и броя скокове, които са направени

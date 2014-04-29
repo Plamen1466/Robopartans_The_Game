@@ -6,6 +6,7 @@ from Live import Live
 from Platforms import Platforms
 from BadPlatform import Bad_Platform
 from Shield import Shield
+from Enemy import Enemy
 from pygame.locals import *
 
 
@@ -44,7 +45,7 @@ class Player(Entity):
             self.image = pygame.transform.scale(self.image, (55, 72))
 
 
-    def update(self, up, left, right, running, platforms, max_height):        #Функция за ъпдейтване на състоянието на играча
+    def update(self, up, left, right, running, platforms, enemy, max_height):        #Функция за ъпдейтване на състоянието на играча
         if up:  #Скок
             # Скочи само ако си на платформа
             if self.onGround:
@@ -82,16 +83,16 @@ class Player(Entity):
         # Измести играча по X
         self.rect.left += self.xvel
         # Колизия по Х
-        self.collide(self.xvel, 0, platforms, max_height)
+        self.collide(self.xvel, 0, platforms,enemy, max_height)
         # Измести играча по Y
         self.rect.top += self.yvel
         # Играча не се намира на платформа
         self.onGround = False;
         # Колизия по Y
-        self.collide(0, self.yvel, platforms, max_height)
+        self.collide(0, self.yvel, platforms, enemy, max_height)
         self.change_skin()
     
-    def collide(self, xvel, yvel, platforms, max_height):   #Функция, проверяваща за колизии 
+    def collide(self, xvel, yvel, platforms, enemy, max_height):   #Функция, проверяваща за колизии 
         for p in platforms:
             if pygame.sprite.collide_rect(self, p): 
                 if isinstance(p, Target):       #Ако играча е в рамките на зъбно колело
@@ -109,6 +110,7 @@ class Player(Entity):
                     pygame.time.delay(1000)         #Изчаква се 1 секунда
                     self.rect.left = 40             #Играчът се връща в началото на нивото
                     self.rect.top = 40
+                
                 elif isinstance(p, Live):
                     self.lives += 1
                     p.hide()
@@ -118,7 +120,6 @@ class Player(Entity):
                     self.change_skin()
                     p.hide()
                     platforms.remove(p)         #Премахва се от списъка с платформи
-                
                 else:                               #В останалите случаи променяй състоянието на играча 
                     if xvel > 0:
                         self.rect.right = p.rect.left
@@ -134,3 +135,14 @@ class Player(Entity):
                         self.hitPlatform = True 
                         self.onGround = False
                         self.yvel = 0 
+        for p in enemy:
+            if pygame.sprite.collide_rect(self, p): 
+                if isinstance(p, Enemy):   #Ако играча е в рамките на платформа, която го убива
+                    self.lives-=1                   #Намаляват се животите с 1
+                    pain_sound = pygame.mixer.Sound('files/Sounds/pain.wav')
+                    pain_sound.set_volume(0.05)
+                    pain_sound.play()               #Изпълнява се съответния звук
+                    pygame.time.delay(1000)         #Изчаква се 1 секунда
+                    self.rect.left = 40             #Играчът се връща в началото на нивото
+                    self.rect.top = 40
+                
