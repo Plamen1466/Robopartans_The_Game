@@ -19,9 +19,17 @@ from Shield import Shield
 from Sword import Sword
 from Enemy import Enemy
 
+import Tkinter
 
-WIN_WIDTH = 1200
-WIN_HEIGHT = 705
+root = Tkinter.Tk()
+
+WIN_WIDTH = root.winfo_screenwidth()
+WIN_HEIGHT = root.winfo_screenheight()
+
+
+
+
+
 HALF_WIDTH = int(WIN_WIDTH / 2)
 HALF_HEIGHT = int(WIN_HEIGHT / 2)
 current_level = 1
@@ -210,10 +218,10 @@ if not pygame.font.get_init():
 
 def about():                #Страница About
     pygame.init()
-    screen = pygame.display.set_mode((1300,650), pygame.FULLSCREEN)
+    screen = pygame.display.set_mode(DISPLAY, pygame.FULLSCREEN)
     background = pygame.image.load("files/fon_martinchovci.png")
     background = pygame.transform.scale(background, (1450,805))
-    screen.blit(background, (-80, -100))
+    screen.blit(background, (-40, -60))
     font = pygame.font.Font('files/Fonts/Play-Regular.ttf',30)
     font_title=pygame.font.Font('files/Fonts/Adventure Subtitles.ttf',40)
     autors = font_title.render("ABOUT THE CREATOR:", 1,(145,183,220))
@@ -235,10 +243,10 @@ def about():                #Страница About
 
 def help():             #Страница Help
     pygame.init()
-    screen = pygame.display.set_mode((1300,650), pygame.FULLSCREEN)
+    screen = pygame.display.set_mode(DISPLAY, pygame.FULLSCREEN)
     background = pygame.image.load("files/fon_martinchovci.png")
     background = pygame.transform.scale(background, (1450,805))
-    screen.blit(background, (-80, -100))
+    screen.blit(background, (-40, -60))
     font_title=pygame.font.Font('files/Fonts/Adventure Subtitles.ttf',40)
     help = font_title.render("HOW TO PLAY:", 1,(145,183,220))  
     help_image = pygame.image.load("files/help.png") 
@@ -268,17 +276,17 @@ def menu_game():                #Функция, извеждаща менюто
     pygame.display.set_caption("RBP_V1.2")
 
 #Избор на размер на прозореца 
-    screen = pygame.display.set_mode((1300,650), pygame.FULLSCREEN) 
+    screen = pygame.display.set_mode(DISPLAY, pygame.FULLSCREEN) 
 
 #Зареждане на фон на менюто
     background = pygame.image.load("files/Martinchovcite_menu1.png")
     background = pygame.transform.scale(background, (1450,805))
-    screen.blit(background, (-80, -100))
+    screen.blit(background, (-40, -60))
 
 #Пояснителен текст над менюто  
     font=pygame.font.Font('files/Fonts/Adventure Subtitles.ttf',30)
     menutext=font.render("MENU", 1,(145,183,220))
-    screen.blit(menutext, (677, 230))
+    screen.blit(menutext, (720, 270))
 
     menu = Menu()   #Инициализация на менюто
 
@@ -289,7 +297,7 @@ def menu_game():                #Функция, извеждаща менюто
     menu.set_fontsize(30)
 
 #Задаване на позиция, където менюто ще бъде изведено     
-    menu.move_menu(75, 58)
+    menu.move_menu(85, 37)
 
 #Задаване на съдържанието 
     menu.init(['Start','Help','About','Quit'], screen)
