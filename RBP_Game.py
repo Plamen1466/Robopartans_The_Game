@@ -16,6 +16,7 @@ from pygame.locals import *
 from pygame import *
 from menu import Menu
 from Shield import Shield
+from Sword import Sword
 from Enemy import Enemy
 
 
@@ -47,8 +48,8 @@ def game(level_folder, lives):
     entities = pygame.sprite.Group()
     player = Player(40, 40, directory, lives)                                   #Създаване на играча от класа Player
     platforms = []                                            #Инициализация на списък, в който ще се съхраняват всички активни платформи 
-    enemy = []
-
+    enemy = []                                                #Инициализация на списък, в който ще се съхраняват всики противници на играча
+    gears = []
     x = y = 0 
     path_to_map = 'files/Levels/'+level_folder+'/map.txt'
     f_level = open(path_to_map) 
@@ -82,7 +83,7 @@ def game(level_folder, lives):
                 entities.add(g)
             if col == "T":
                 t = Target(x, y)
-                platforms.append(t)
+                gears.append(t)
                 entities.add(t)
                 player.gears_count += 1
             if col == "B":
@@ -97,10 +98,15 @@ def game(level_folder, lives):
                 v = Shield(x, y, directory)
                 platforms.append(v)
                 entities.add(v)
+            if col == "I":
+                i = Sword(x, y, directory)
+                platforms.append(i)
+                entities.add(i)
             if col == "E":
                 e = Enemy(x, y, directory)
                 enemy.append(e)
                 entities.add(e)
+            
            
             
             x += 32
@@ -151,7 +157,7 @@ def game(level_folder, lives):
         # Ъпдейтване на играча и извеждане на всичко останало
         for i in enemy:
             i.update(True, platforms, total_level_height)         
-        player.update(up, left, right, running, platforms, enemy, total_level_height)
+        player.update(up, left, right, running, platforms, enemy, gears, total_level_height)
                
         for e in entities:
             screen.blit(e.image, camera.apply(e))

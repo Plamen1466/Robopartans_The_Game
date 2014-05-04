@@ -64,3 +64,5 @@ class Enemy(Entity):
                     self.hitPlatform = True 
                     self.onGround = False
                     self.yvel = 0
+    def hide(self):
+        self.image.fill(((153,255,0, 0))) #Цвета става като този на фона и се задава пълна прозрачност
