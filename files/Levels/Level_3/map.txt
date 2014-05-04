@@ -17,7 +17,7 @@ S            SSSSSSSSSS             T                                 SSSS      
 S                                  SSSS                       T                    S             S
 S                           T                              SSSSSSSS          SSSSSSSSSSSSSSSS    S
 S                         SSSSS                                             S                 TT S
-S                                                                          STTTTTTTTTTTTTTTTTTTTTS
+S                                                                          STTT   TTTTTTTTTTTTTTTS
 S          E                            E            E          S   E   SSS     E                S
 S                               S            S                SSSSSSSSSSSSSS                     S
 SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
